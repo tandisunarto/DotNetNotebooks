@@ -1,0 +1,45 @@
+#!csharp
+
+public void Show(object o)
+{
+  Console.WriteLine(o);
+}
+
+public class Employee
+{ 
+  public string Name { get; init; }
+
+  public Employee()
+  {
+    Name = "anonymous";
+    Console.WriteLine(">>>> Employee Constructor 1");
+  }
+
+  public Employee(string name)
+  {
+    Name = name;
+    Console.WriteLine(">>>> Employee Constructor 2");
+  }
+}
+
+#!csharp
+
+using System.Reflection;
+
+var employeeType = typeof(Employee);
+var employeeConstructors = employeeType.GetConstructors();
+
+
+var ctor1 = employeeType.GetConstructor(BindingFlags.Instance | BindingFlags.Public, null, new Type[] {}, null);
+var ctor2 = employeeType.GetConstructor(BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(string) }, null);
+
+var emp1 = ctor1.Invoke(null);
+var emp2 = ctor2.Invoke(new object[] { "tandi" });
+
+Show(emp1);
+Show(emp2);
+
+#!csharp
+
+var emp1 = Activator.CreateInstance(typeof(Employee)) as Employee;
+Show(emp1.Name);

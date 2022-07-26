@@ -1,0 +1,68 @@
+#!markdown
+
+**Reflection**
+
+The process by which we can observe and modify object's structure and behavior. To do reflection, we use helper objects in the System.Reflection namespace
+
+Reflection use cases:
+- Dependency injection containers
+- Calling private and protected methods, fields and properties
+- Serialization
+- Type inspector applications
+- Code analysis tools
+
+#!csharp
+
+using System.Reflection;
+
+public class Employee
+{ 
+  public Employee()
+  {
+    Console.WriteLine(">>>> Employee Constructor");
+  }
+}
+
+var currentAssembly = Assembly.GetExecutingAssembly();
+
+// get all types in the current assembly
+var typesFromCurrentAssembly = currentAssembly.GetTypes();
+
+// Type empType = typeof(Employee);
+Type empType; 
+foreach(var t in typesFromCurrentAssembly)
+{
+  Console.WriteLine(t.Name);
+  if (t.Name == "Employee") empType = t;
+}
+
+var employeeCtor = empType.GetConstructor(BindingFlags.Instance | BindingFlags.Public, null, new Type[0], null);
+
+var employee = employeeCtor.Invoke(null);
+
+#!markdown
+
+![Method Info](images/method-info.png)
+
+#!markdown
+
+**Binding**
+
+It is a process of location the implementation that corresponds to the specified type.
+
+There are 2 types of binding:
+- Late binding  
+  The objects are dynamic and actual type is decided at runtime
+
+- Early binding  
+  Looks for methods and properties, and checks whether they exist at compile time
+
+**BindingFlags enumeration** 
+
+Control how reflection searches
+- BindingFlags.Public
+- BindingFlags.Instance
+
+Control the binding itself
+- BindingFlags.GetProperty
+- BindingFlags.SetField

@@ -1,0 +1,22 @@
+#!csharp
+
+using System.Linq.Expressions;
+
+public string SayGreeting(Func<string> f)
+{
+  return f();
+}
+
+public string SayGreetingExpr(Expression<Func<string>> f)
+{
+  var a = f.Compile();
+  return a.Invoke();
+}
+
+public string MessageOne(string msg1)
+{
+  return msg1 + " World";
+}
+
+Console.WriteLine(SayGreeting(() => MessageOne("Hello")));
+Console.WriteLine(SayGreetingExpr(() => MessageOne("Hello")));

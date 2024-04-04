@@ -1,0 +1,30 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":null,"items":[{"name":"csharp","languageName":"C#","aliases":["c#","cs"]},{"name":"fsharp","languageName":"F#","aliases":["f#","fs"]},{"name":"pwsh","languageName":"PowerShell","aliases":["powershell"]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"html","languageName":"HTML"},{"name":"sql","languageName":"SQL"},{"name":"kql","languageName":"KQL"},{"name":"mermaid","languageName":"Mermaid"},{"name":"httpRequest","languageName":"http"},{"name":"value"}]}}
+
+#!csharp
+
+using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Reflection;
+
+public class SwapiModel
+{
+  public string Name { get; set; }
+  public string Hair_Color { get; set; }
+}
+
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
+[JsonSerializable(typeof(SwapiModel))]
+internal partial class SourceGenerationContext : JsonSerializerContext
+{
+}
+
+var client = new HttpClient();
+var response = await client.GetStringAsync("https://swapi.dev/api/people/1");
+
+Console.WriteLine(response);
+Console.WriteLine("======================");
+
+var person = JsonSerializer.Deserialize<SwapiModel>(response, SourceGenerationContext.Default.SwapiModel);

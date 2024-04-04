@@ -1,0 +1,40 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":"csharp"}]}}
+
+#!csharp
+
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.IO;
+
+string attrName = "sys_id";
+
+using (StreamReader response = new("big-data.json")) 
+{
+  var instanceJson = await response.ReadToEndAsync();
+  JsonDocument instanceDoc = JsonDocument.Parse(instanceJson);
+  JsonElement result = instanceDoc.RootElement.GetProperty("result");
+  List<dynamic> data = JsonSerializer.Deserialize<List<dynamic>>(result);
+  //Console.WriteLine(data.ToList().Find(d => d.GetProperty(attrName).GetString() == "10884798c61122750108b095e21e4080"));
+  foreach(var d in data)
+  {
+    Console.WriteLine(d.GetProperty(attrName));
+  }
+}
+
+var data = "{\"discovery_source\":\"test\"}";
+var d = JsonSerializer.Deserialize<dynamic>("{\"discovery_source\":\"test\"}");
+var e = JsonSerializer.Serialize(d);
+Console.WriteLine(d);
+Console.WriteLine(e);
+
+#!csharp
+
+int[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+foreach(var num in nums)
+{
+  if (num == 4) break;
+  Console.WriteLine(num);
+}

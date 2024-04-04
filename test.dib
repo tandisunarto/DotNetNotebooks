@@ -4,23 +4,17 @@
 
 #!csharp
 
-using System.Linq.Expressions;
-
-public string SayGreeting(Func<string> f)
+record Person (string FirstName, string LastName)
 {
-  return f();
+  public void Deconstruct(out string Fullname)
+  {
+    Fullname = "My Fullname is " + FirstName + " " + LastName;
+  }
 }
 
-public string SayGreetingExpr(Expression<Func<string>> f)
-{
-  var a = f.Compile();
-  return a.Invoke();
-}
+Person john = new("John", "Doe");
 
-public string MessageOne(string msg1)
-{
-  return msg1 + " World";
-}
+var (f, l) = john;
+var (fn) = john;
 
-Console.WriteLine(SayGreeting(() => MessageOne("Hello")));
-Console.WriteLine(SayGreetingExpr(() => MessageOne("Hello")));
+Console.WriteLine(f + " " + l);
